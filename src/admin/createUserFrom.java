@@ -27,11 +27,41 @@ public class createUserFrom extends javax.swing.JFrame {
     }
     
     public boolean duplicateCheck(){
+    dbConnect dbc = new dbConnect();
+    
+    try{
+     String query = "SELECT * FROM tbl_user  WHERE u_username = '" + un.getText()+"' OR u_email = '" + em.getText() + "'";
+        ResultSet resultSet = dbc.getData(query);
+        
+        
+        if(resultSet.next()){
+            email =resultSet.getString("u_email");
+            if(email.equals(em.getText())){
+                 JOptionPane.showMessageDialog(null,"Email is Already Used!");
+            em.setText("");
+            }
+         String uname = resultSet.getString("u_username");
+            if(email.equals(un.getText())){ 
+                 JOptionPane.showMessageDialog(null,"Username is Already Used!");
+            un.setText("");    
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }catch(SQLException ex){
+        System.out.println(""+ex);
+        return false;
+    
+      }
+    }
+    
+    public boolean updateCheck(){
     
     dbConnect dbc = new dbConnect();
     
     try{
-     String query = "SELECT * FROM tbl_user  WHERE u_username = '" + un.getText()+"' Or u_email = '" + em.getText() + "'";
+     String query = "SELECT * FROM tbl_user  WHERE (u_username = '" + un.getText()+"' OR u_email = '" + em.getText() + "'AND u_id !='"+uid.getText()+"'";
         ResultSet resultSet = dbc.getData(query);
         
         
@@ -56,6 +86,7 @@ public class createUserFrom extends javax.swing.JFrame {
     
       }
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -79,7 +110,7 @@ public class createUserFrom extends javax.swing.JFrame {
         ln = new javax.swing.JTextField();
         us = new javax.swing.JComboBox<>();
         em = new javax.swing.JTextField();
-        ct = new javax.swing.JTextField();
+        conum = new javax.swing.JTextField();
         un = new javax.swing.JTextField();
         fn = new javax.swing.JTextField();
         ut = new javax.swing.JComboBox<>();
@@ -168,12 +199,12 @@ public class createUserFrom extends javax.swing.JFrame {
         });
         jPanel2.add(em, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 290, 170, 30));
 
-        ct.addActionListener(new java.awt.event.ActionListener() {
+        conum.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ctActionPerformed(evt);
+                conumActionPerformed(evt);
             }
         });
-        jPanel2.add(ct, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, 170, 30));
+        jPanel2.add(conum, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, 170, 30));
 
         un.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -263,7 +294,7 @@ public class createUserFrom extends javax.swing.JFrame {
         });
         jPanel2.add(ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 170, 30));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 740, 460));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, 740, 460));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -282,7 +313,7 @@ public class createUserFrom extends javax.swing.JFrame {
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
 
-       if(ln.getText().isEmpty()|| ln.getText().isEmpty()|| em.getText().isEmpty()|| ct.getText().isEmpty()
+       if(ln.getText().isEmpty()|| ln.getText().isEmpty()|| em.getText().isEmpty()|| conum.getText().isEmpty()
             || un.getText().isEmpty()|| ps.getText().isEmpty()){
             JOptionPane.showMessageDialog(null,"All Fields are Required!");
         }else if(ps.getText().length()<8){
@@ -292,7 +323,7 @@ public class createUserFrom extends javax.swing.JFrame {
         }else{
             dbConnect dbc = new dbConnect();
             if(dbc.insertData("INSERT INTO tbl_user (u_fname, u_lname, u_email, u_contact,u_username, u_type, u_password, u_status) "
-                + "VALUES ('" + ln.getText() + "', '" + ln.getText() + "', '" + em.getText() + "', '" + ct.getText() + "', "
+                + "VALUES ('" + ln.getText() + "', '" + ln.getText() + "', '" + em.getText() + "', '" + conum.getText() + "', "
                 + "'" + un.getText() + "', '" + us.getSelectedItem() + "', '" + ps.getText() + "', '"+us.getSelectedItem()+"')"))
 
         {
@@ -321,9 +352,9 @@ public class createUserFrom extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_emActionPerformed
 
-    private void ctActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ctActionPerformed
+    private void conumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conumActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ctActionPerformed
+    }//GEN-LAST:event_conumActionPerformed
 
     private void unActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unActionPerformed
         // TODO add your handling code here:
@@ -348,10 +379,27 @@ public class createUserFrom extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        if(fn.getText().isEmpty()|| ln.getText().isEmpty()|| em.getText().isEmpty()|| conum.getText().isEmpty()
+                    || un.getText().isEmpty()|| ps.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null,"All Fields are Required!");
+        }else if(ps.getText().length()<8){
+            JOptionPane.showMessageDialog(null,"Password Must be 8 Characters Long!");
+            ps.setText("");
+        }else if(updateCheck()){
+            System.out.println("Duplicate Exist");
+        }else{
         dbConnect dbc = new dbConnect();
-        dbc.updateData("UPDATE tbl_user SET u_fname = '"+fn.getText()+"',u_lname = '"+ln.getText()+"',u_email = '"+em.getText()+"',"
-                + "u_contact'"+ct.getText()+"',u_type'"+ut.getSelectedItem()+"',"
-                        + "u_password'"+ps.getText()+"',u_status = '"+us.getSelectedItem()+"' WHERE u_id = '"+uid.getText()+"'");
+        dbc.updateData("UPDATE tbl_user SET u_fname = '"+fn.getText()+", u_lname '"+ln.getText()+"', u_email '"+em.getText()+"',"
+                + " u_username '"+un.getText()+"', u_password '"+ps.getText()+"',"
+                        + " u_type '"+ut.getSelectedItem()+"',"
+                                + " u_status'"+us.getSelectedItem()+"'WHERE u_id = '"+uid.getText()+"'");
+                
+                System.out.println("Updated Successfully");
+                 usersForm uf = new usersForm();
+                 uf.setVisible(true);
+                 this.dispose();
+                                
+        }   
     }//GEN-LAST:event_updateActionPerformed
 
     private void register3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_register3ActionPerformed
@@ -409,7 +457,7 @@ public class createUserFrom extends javax.swing.JFrame {
     public javax.swing.JButton add;
     private javax.swing.JButton cancel;
     private javax.swing.JButton clear;
-    public javax.swing.JTextField ct;
+    public javax.swing.JTextField conum;
     public javax.swing.JTextField em;
     public javax.swing.JTextField fn;
     private javax.swing.JLabel jLabel10;

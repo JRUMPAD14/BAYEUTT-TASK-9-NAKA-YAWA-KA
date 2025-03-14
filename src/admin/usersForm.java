@@ -38,7 +38,7 @@ public class usersForm extends javax.swing.JFrame {
     
         try{
             dbConnect dbc = new dbConnect();
-            ResultSet rs = dbc.getData("SELECT u_id, u_fname, u_lname, u_email,u_contact,u_status FROM tbl_user");
+            ResultSet rs = dbc.getData("SELECT u_id, u_fname, u_lname, u_email, u_username, u_contact, u_status FROM tbl_user");
             usersTable.setModel(DbUtils.resultSetToTableModel(rs));
             rs.close();
         }catch(SQLException ex){
@@ -231,7 +231,7 @@ public class usersForm extends javax.swing.JFrame {
           cuf.fn.setText(""+rs.getString("u_fname"));
           cuf.em.setText(""+rs.getString("u_email"));
           cuf.un.setText(""+rs.getString("u_username"));
-          cuf.ct.setText(""+rs.getString("u_contact"));
+          cuf.conum.setText(""+rs.getString("u_contact"));
           cuf.ps.setText(""+rs.getString("u_password"));
           cuf.ut.setSelectedItem(""+rs.getString("u_type"));
           cuf.us.setSelectedItem(""+rs.getString("u_status"));

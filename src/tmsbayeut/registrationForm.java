@@ -31,7 +31,7 @@ public class registrationForm extends javax.swing.JFrame {
     dbConnect dbc = new dbConnect();
     
     try{
-     String query = "SELECT * FROM tbl_user  WHERE u_username = '" + uname.getText()+"' Or u_email = '" + em.getText() + "'";
+     String query = "SELECT * FROM tbl_user  WHERE u_username = '" + uname.getText()+"' OR u_email = '" + em.getText() + "'";
         ResultSet resultSet = dbc.getData(query);
         
         
@@ -167,25 +167,25 @@ public class registrationForm extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel8.setText("User Name");
+        jLabel8.setText("User Name:");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 330, 90, 30));
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel9.setText("Contact No.");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 290, 90, 30));
-        jPanel1.add(uname, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 330, 170, -1));
+        jPanel1.add(uname, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 330, 170, 30));
 
         fname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fnameActionPerformed(evt);
             }
         });
-        jPanel1.add(fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 150, 170, -1));
-        jPanel1.add(lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 190, 170, -1));
-        jPanel1.add(em, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 240, 170, -1));
-        jPanel1.add(cnum, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 290, 170, -1));
-        jPanel1.add(pword, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 430, 160, -1));
+        jPanel1.add(fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 150, 170, 30));
+        jPanel1.add(lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 190, 170, 30));
+        jPanel1.add(em, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 240, 170, 30));
+        jPanel1.add(cnum, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 290, 170, 30));
+        jPanel1.add(pword, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 430, 170, 30));
 
         utype.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "User" }));
         utype.addActionListener(new java.awt.event.ActionListener() {
@@ -193,7 +193,7 @@ public class registrationForm extends javax.swing.JFrame {
                 utypeActionPerformed(evt);
             }
         });
-        jPanel1.add(utype, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 380, 150, -1));
+        jPanel1.add(utype, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 380, 170, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -228,7 +228,7 @@ public class registrationForm extends javax.swing.JFrame {
             System.out.println("Duplicate Exist");
         }else{
             dbConnect dbc = new dbConnect();
-        if(dbc.insertData("INSERT INTO tbl_user (u_fname, u_lname, u_email, u_contact,u_username, u_type, u_password, u_status) "
+        if(dbc.insertData("INSERT INTO tbl_user (u_fname, u_lname, u_email, u_contact, u_username, u_type, u_password, u_status) "
               + "VALUES ('" + fname.getText() + "', '" + lname.getText() + "', '" + em.getText() + "', '" + cnum.getText() + "', "
                     + "'" + uname.getText() + "', '" + utype.getSelectedItem() + "', '" + pword.getText() + "', 'Pending')"))
 
